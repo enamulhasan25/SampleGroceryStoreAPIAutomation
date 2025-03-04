@@ -2,6 +2,7 @@ package steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.restassured.response.Response;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -13,14 +14,11 @@ import static java.lang.System.out;
 
 public class AddAnItemToCart {
 
-    // Accessing Singleton instance from the common Validations Class
-    ServiceCalls cm = ServiceCalls.getInstance();
-
     private String actualItemIdFromResponse;
 
-    public final String jsonFilePath = "src/test/resources/requestPayloads/addItemToCart.json";
+    public static final String jsonFilePath = "src/test/resources/requestPayloads/addItemToCart.json";
 
-    public JSONObject getProductIdFromRequestPayloadTemplate() throws IOException {
+    public static JSONObject getProductIdFromRequestPayloadTemplate() throws IOException {
         String content = FileUtils.readFileToString(new File(jsonFilePath), StandardCharsets.UTF_8);
         return new JSONObject(content);
     }
@@ -33,8 +31,11 @@ public class AddAnItemToCart {
 
     @Then("capture the itemId from the response")
     public void captureItemIdFromResponse() {
-        cm.getResponse().body().prettyPrint();
-        actualItemIdFromResponse = cm.getResponse().jsonPath().getString("itemId").trim();
+        ServiceCalls.res.body().prettyPrint();
+        actualItemIdFromResponse = ServiceCalls.res.jsonPath().getString("itemId");
+        if (actualItemIdFromResponse == null) {
+            throw new RuntimeException("Failed to capture itemId from response.");
+        }
         out.println("Captured ItemId: " + actualItemIdFromResponse);
     }
 }

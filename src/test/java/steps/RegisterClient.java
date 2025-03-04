@@ -16,9 +16,6 @@ import static java.lang.System.out;
 
 public class RegisterClient {
 
-    // Accessing Singleton instance from the common Validations Class
-    ServiceCalls cm = ServiceCalls.getInstance();
-
     private static String createAPIClientPayload;
 
     // Getter
@@ -65,8 +62,8 @@ public class RegisterClient {
 
     @And("capture the response payload")
     public void capturingResponsePayload() {
-        String accessTokenFromResponsePayload = cm.getResponse().jsonPath().getString("accessToken");
-        cm.getResponse().body().prettyPrint();
+        String accessTokenFromResponsePayload = ServiceCalls.res.jsonPath().getString("accessToken");
+        ServiceCalls.res.body().prettyPrint();
         out.println("Access Token From Response payload is = " + accessTokenFromResponsePayload);
     }
 }

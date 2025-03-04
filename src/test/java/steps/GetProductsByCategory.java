@@ -2,7 +2,6 @@ package steps;
 
 import io.cucumber.java.en.Then;
 import io.restassured.path.json.JsonPath;
-
 import org.junit.Assert;
 
 import java.util.List;
@@ -12,12 +11,9 @@ import static java.lang.System.out;
 
 public class GetProductsByCategory {
 
-    // Accessing Singleton instance from the common Validations Class
-    ServiceCalls cm = ServiceCalls.getInstance();
-
     @Then("all products should have the category {string}")
     public void all_products_should_have_the_category(String expectedCategory) {
-        JsonPath jsonPath = JsonPath.given(cm.getResponse().body().prettyPrint());
+        JsonPath jsonPath = JsonPath.given(ServiceCalls.res.body().prettyPrint());
         List<Map<String, Object>> products = jsonPath.getList("$");
 
         boolean allMatch = products.stream()

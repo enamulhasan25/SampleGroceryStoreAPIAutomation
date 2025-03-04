@@ -1,27 +1,29 @@
 package steps;
 
 import io.cucumber.java.en.Then;
-import io.restassured.response.Response;
 
 import static java.lang.System.out;
 
 public class CreateNewCart {
-
-    // Accessing a singleton instance
-    ServiceCalls sc = ServiceCalls.getInstance();
-    public static String newlyCreatedCartId = "";
+    private final CartIdSharedContext cartContext = CartIdSharedContext.getInstance();
 
     @Then("capture the newly created cartId from the response")
     public void captureNewlyCreatedCart() {
-        Response currentResponse = sc.getResponse();
-        if (currentResponse != null) {
-            currentResponse.body().prettyPrint();
-            // Extract the cartId from the response
-            newlyCreatedCartId = currentResponse.body().jsonPath().getString("cartId").trim();
-            out.println("Newly created cart id is: " + newlyCreatedCartId);
-            // sca.aGetCallMadeToTheCartEndpoint(newlyCreatedCartId);
+        if (ServiceCalls.res != null) {
+            String newlyCreatedCartId = ServiceCalls.res.body().jsonPath().getString("cartId");
+            if (newlyCreatedCartId != null) {
+                newlyCreatedCartId = newlyCreatedCartId.trim();
+                out.println("Newly created cart id is: " + newlyCreatedCartId);
+
+                // Save to shared context
+                cartContext.setCartId(newlyCreatedCartId);
+                // Save to file
+                SavingCartIdAfterGeneration.saveCartId(newlyCreatedCartId);
+            } else {
+                out.println("cartId not found in the response.");
+            }
         } else {
-            out.println("Response is null. Please check again.");
+            out.println("Response is null. Please check the API call.");
         }
     }
 }
