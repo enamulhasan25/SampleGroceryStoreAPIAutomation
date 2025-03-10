@@ -5,7 +5,16 @@ import io.cucumber.java.en.Then;
 import static java.lang.System.out;
 
 public class CreateNewCart {
-    private final CartIdSharedContext cartContext = CartIdSharedContext.getInstance();
+
+    private static String cartId;
+
+    public static String getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(String cartId) {
+        this.cartId = cartId;
+    }
 
     @Then("capture the newly created cartId from the response")
     public void captureNewlyCreatedCart() {
@@ -15,10 +24,10 @@ public class CreateNewCart {
                 newlyCreatedCartId = newlyCreatedCartId.trim();
                 out.println("Newly created cart id is: " + newlyCreatedCartId);
 
-                // Save to shared context
-                cartContext.setCartId(newlyCreatedCartId);
+                // Save cartId to variable
+                setCartId(newlyCreatedCartId);
                 // Save to file
-                SavingCartIdAfterGeneration.saveCartId(newlyCreatedCartId);
+                steps.SavingCartIdAfterGeneration.saveCartId(newlyCreatedCartId);
             } else {
                 out.println("cartId not found in the response.");
             }

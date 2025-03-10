@@ -14,10 +14,10 @@ public class ServiceCalls {
 
     public static Response res;
 
-    private final CartIdSharedContext testContext;
+    String cartId = CreateNewCart.getCartId();
+    String itemId = AddAnItemToCart.getItemId();
 
     public ServiceCalls() {
-        this.testContext = CartIdSharedContext.getInstance();
     }
 
     // GET Service Call
@@ -35,9 +35,8 @@ public class ServiceCalls {
     // GET call for retrieving the newly created cart
     @When("a GET call is made to the newly created cartId {string}")
     public void aGetCallMadeToTheCartEndpoint(String endpoint) {
-        String cartId = testContext.getCartId();
         if (cartId == null) {
-            cartId = SavingCartIdAfterGeneration.getSavedCartId();  // Retrieve from file if null
+            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();  // Retrieve from file if null
         }
         if (cartId == null) {
             throw new RuntimeException("Cart ID is null! Make sure the cart is created first.");
@@ -49,9 +48,8 @@ public class ServiceCalls {
     // POST call for adding an item into cart
     @When("a POST call is made to the add cart endpoint {string} with cartId")
     public void aPOSTCallMadeToTheAddCartEndpoint(String endpoint) throws IOException {
-        String cartId = testContext.getCartId();
         if (cartId == null) {
-            cartId = SavingCartIdAfterGeneration.getSavedCartId();
+            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
         }
         if (cartId == null) {
             throw new RuntimeException("Cart ID is null! Make sure the cart is created first.");
@@ -65,6 +63,61 @@ public class ServiceCalls {
                 .when()
                 .post(endpoint);
     }
+
+    // Patch call is for updating the quantity in the cart
+    @When("a PATCH call is made to the update cart endpoint {string} with itemId")
+    public void aPATCHCallMadeToTheUpdateCartEndpoint(String endpoint) throws IOException {
+        if (itemId == null && cartId == null) {
+            itemId = steps.SaveItemIdAfterGeneration.getSavedItemId();
+            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+        } else {
+            throw new RuntimeException("ItemId ID is null! Make sure the product is added to the cart first.");
+        }
+        out.println("Using Item ID: " + itemId);
+        res = given()
+                .contentType("application/json")
+                .body(UpdateAnItemFromCart.getQuantityFromRequestPayloadTemplate().toString())
+                .pathParam("cartId", cartId)
+                .pathParam("itemId", itemId)
+                .when()
+                .patch(endpoint);
+    }
+
+    // PUT call is for replacing product from the cart
+    @When("a PUT call is made to replacing a product from cart endpoint {string} with cartId and itemId")
+    public void aPUTCallMadeToTheReplacingAnItemFromCart(String endpoint) throws IOException {
+        if (itemId == null && cartId == null) {
+            itemId = steps.SaveItemIdAfterGeneration.getSavedItemId();
+            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+        } else {
+            throw new RuntimeException("ItemId and CartId are null! Make sure the product is added for the existing cart.");
+        }
+        res = given()
+                .contentType("application/json")
+                .body(ReplaceProductFromCart.getProductWhichNeedsToBeReplacedFromCartUsingRequestPayloadTemplate().toString())
+                .pathParam("cartId", cartId)
+                .pathParam("itemId", itemId)
+                .when()
+                .put(endpoint);
+    }
+
+    // DELETE call is for removing item from the cart
+    @When("a DELETE call is made for product removing from cart {string} with cartId and itemId")
+    public void aDELETECallMadeToTheRemovingAnItemFromCart(String endpoint) throws IOException {
+        if (itemId == null && cartId == null) {
+            itemId = steps.SaveItemIdAfterGeneration.getSavedItemId();
+            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+        } else {
+            throw new RuntimeException("ItemId and CartId are null! Make sure the product is added in the cart.");
+        }
+        res = given()
+                .contentType("application/json")
+                .pathParam("cartId", cartId)
+                .pathParam("itemId", itemId)
+                .when()
+                .delete(endpoint);
+    }
+
 
     // POST call for registering a client
     @When("a POST call is made to the {string}")

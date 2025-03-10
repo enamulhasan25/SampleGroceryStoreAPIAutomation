@@ -2,7 +2,6 @@ package steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.restassured.response.Response;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -15,6 +14,16 @@ import static java.lang.System.out;
 public class AddAnItemToCart {
 
     private String actualItemIdFromResponse;
+
+    private static String itemId;
+
+    public static String getItemId() {
+        return itemId;
+    }
+
+    public static void setItemId(String itemId) {
+        AddAnItemToCart.itemId = itemId;
+    }
 
     public static final String jsonFilePath = "src/test/resources/requestPayloads/addItemToCart.json";
 
@@ -33,9 +42,16 @@ public class AddAnItemToCart {
     public void captureItemIdFromResponse() {
         ServiceCalls.res.body().prettyPrint();
         actualItemIdFromResponse = ServiceCalls.res.jsonPath().getString("itemId");
-        if (actualItemIdFromResponse == null) {
+        if (actualItemIdFromResponse != null) {
+            actualItemIdFromResponse = actualItemIdFromResponse.trim();
+            out.println("ItemId is : " + actualItemIdFromResponse);
+
+            // Save ItemId to a variable
+            setItemId(actualItemIdFromResponse);
+            // Save to file
+            steps.SaveItemIdAfterGeneration.saveItemId(actualItemIdFromResponse);
+        } else {
             throw new RuntimeException("Failed to capture itemId from response.");
         }
-        out.println("Captured ItemId: " + actualItemIdFromResponse);
     }
 }
