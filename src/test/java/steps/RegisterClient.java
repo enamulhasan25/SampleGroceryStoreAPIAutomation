@@ -2,6 +2,7 @@ package steps;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -15,6 +16,16 @@ import java.util.UUID;
 import static java.lang.System.out;
 
 public class RegisterClient {
+
+    private static String accessToken;
+
+    public static String getAccessToken() {
+        return accessToken;
+    }
+
+    public static void setAccessToken(String accessToken) {
+        RegisterClient.accessToken = accessToken;
+    }
 
     private static String createAPIClientPayload;
 
@@ -60,10 +71,23 @@ public class RegisterClient {
         createAPIClientPayload = generateStringFromResource(jsonFilePath);
     }
 
-    @And("capture the response payload")
-    public void capturingResponsePayload() {
-        String accessTokenFromResponsePayload = ServiceCalls.res.jsonPath().getString("accessToken");
-        ServiceCalls.res.body().prettyPrint();
-        out.println("Access Token From Response payload is = " + accessTokenFromResponsePayload);
+    @And("capture the access token")
+    public void capturingAccessToken() {
+        if (ServiceCalls.res != null) {
+            String accessTokenFromResponsePayload = ServiceCalls.res.jsonPath().getString("accessToken");
+            if (accessTokenFromResponsePayload != null) {
+                ServiceCalls.res.body().prettyPrint();
+                accessTokenFromResponsePayload = accessTokenFromResponsePayload.trim();
+                out.println("Newly generated access token is: " + accessTokenFromResponsePayload);
+
+                setAccessToken(accessTokenFromResponsePayload);
+                // Save to file
+                steps.SavingAccessTokenForRegisteredClient.saveAccessToken(accessTokenFromResponsePayload);
+            } else {
+                out.println("Access Token not found in the response.");
+            }
+        } else {
+            out.println("Response is null. Please check the API call.");
+        }
     }
 }

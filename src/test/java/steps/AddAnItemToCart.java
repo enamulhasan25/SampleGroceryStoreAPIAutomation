@@ -13,8 +13,6 @@ import static java.lang.System.out;
 
 public class AddAnItemToCart {
 
-    private String actualItemIdFromResponse;
-
     private static String itemId;
 
     public static String getItemId() {
@@ -35,13 +33,13 @@ public class AddAnItemToCart {
     @Given("I have request payload to add an item to cart")
     public void iHaveRequestPayloadToAddAnItemToCart() throws IOException {
         JSONObject payload = getProductIdFromRequestPayloadTemplate();
-        out.println("Request Payload: " + payload.toString());
+        out.println("Request Payload: " + payload);
     }
 
     @Then("capture the itemId from the response")
     public void captureItemIdFromResponse() {
         ServiceCalls.res.body().prettyPrint();
-        actualItemIdFromResponse = ServiceCalls.res.jsonPath().getString("itemId");
+        String actualItemIdFromResponse = ServiceCalls.res.jsonPath().getString("itemId");
         if (actualItemIdFromResponse != null) {
             actualItemIdFromResponse = actualItemIdFromResponse.trim();
             out.println("ItemId is : " + actualItemIdFromResponse);
@@ -49,7 +47,7 @@ public class AddAnItemToCart {
             // Save ItemId to a variable
             setItemId(actualItemIdFromResponse);
             // Save to file
-            steps.SaveItemIdAfterGeneration.saveItemId(actualItemIdFromResponse);
+            SavingItemIdAfterGeneration.saveItemId(actualItemIdFromResponse);
         } else {
             throw new RuntimeException("Failed to capture itemId from response.");
         }

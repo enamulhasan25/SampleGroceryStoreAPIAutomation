@@ -12,8 +12,8 @@ public class CreateNewCart {
         return cartId;
     }
 
-    public void setCartId(String cartId) {
-        this.cartId = cartId;
+    public static void setCartId(String cId) {
+        cartId = cId;
     }
 
     @Then("capture the newly created cartId from the response")
@@ -25,7 +25,7 @@ public class CreateNewCart {
                 out.println("Newly created cart id is: " + newlyCreatedCartId);
 
                 // Save cartId to variable
-                setCartId(newlyCreatedCartId);
+                CreateNewCart.setCartId(newlyCreatedCartId);
                 // Save to file
                 steps.SavingCartIdAfterGeneration.saveCartId(newlyCreatedCartId);
             } else {
