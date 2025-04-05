@@ -33,7 +33,7 @@ public class ServiceCalls {
     @When("a GET call is made to the newly created cartId {string}")
     public void aGetCallMadeToTheCartEndpoint(String endpoint) {
         if (cartId == null) {
-            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();  // Retrieve from file if null
+            cartId = steps.SavingResponsePayloadsData.getSavedCartId();  // Retrieve from file if null
         }
         if (cartId == null) {
             throw new RuntimeException("Cart ID is null! Make sure the cart is created first.");
@@ -46,7 +46,7 @@ public class ServiceCalls {
     @When("a POST call is made to the add cart endpoint {string} with cartId")
     public void aPOSTCallMadeToTheAddCartEndpoint(String endpoint) throws IOException {
         if (cartId == null) {
-            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+            cartId = steps.SavingResponsePayloadsData.getSavedCartId();
         }
         if (cartId == null) {
             throw new RuntimeException("Cart ID is null! Make sure the cart is created first.");
@@ -65,8 +65,8 @@ public class ServiceCalls {
     @When("a PATCH call is made to the update cart endpoint {string} with itemId")
     public void aPATCHCallMadeToTheUpdateCartEndpoint(String endpoint) throws IOException {
         if (itemId == null && cartId == null) {
-            itemId = SavingItemIdAfterGeneration.getSavedItemId();
-            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+            itemId = SavingResponsePayloadsData.getSavedItemId();
+            cartId = steps.SavingResponsePayloadsData.getSavedCartId();
         } else {
             throw new RuntimeException("ItemId ID is null! Make sure the product is added to the cart first.");
         }
@@ -84,8 +84,8 @@ public class ServiceCalls {
     @When("a PUT call is made to replacing a product from cart endpoint {string} with cartId and itemId")
     public void aPUTCallMadeToTheReplacingAnItemFromCart(String endpoint) throws IOException {
         if (itemId == null && cartId == null) {
-            itemId = SavingItemIdAfterGeneration.getSavedItemId();
-            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+            itemId = SavingResponsePayloadsData.getSavedItemId();
+            cartId = steps.SavingResponsePayloadsData.getSavedCartId();
         } else {
             throw new RuntimeException("ItemId and CartId are null! Make sure the product is added for the existing cart.");
         }
@@ -102,8 +102,8 @@ public class ServiceCalls {
     @When("a DELETE call is made for product removing from cart {string} with cartId and itemId")
     public void aDELETECallMadeToTheRemovingAnItemFromCart(String endpoint) throws IOException {
         if (itemId == null && cartId == null) {
-            itemId = SavingItemIdAfterGeneration.getSavedItemId();
-            cartId = steps.SavingCartIdAfterGeneration.getSavedCartId();
+            itemId = SavingResponsePayloadsData.getSavedItemId();
+            cartId = steps.SavingResponsePayloadsData.getSavedCartId();
         } else {
             throw new RuntimeException("ItemId and CartId are null! Make sure the product is added in the cart.");
         }
@@ -141,14 +141,14 @@ public class ServiceCalls {
         } else {
             out.println("customerName is null");
         }
-       // out.println("Cart ID: " + sCartId);
-       // out.println("Customer Name: " + "customer_" + sCustomerName);
+        // out.println("Cart ID: " + sCartId);
+        // out.println("Customer Name: " + "customer_" + sCustomerName);
 
         out.println("Final Payload before sending request: " + requestBody);
-        out.println("Access Token: " + SavingAccessTokenForRegisteredClient.getAccessToken());
+        out.println("Access Token: " + SavingResponsePayloadsData.getAccessToken());
         res = given()
                 .contentType("application/json")
-                .header("Authorization", "Bearer " + SavingAccessTokenForRegisteredClient.getAccessToken())
+                .header("Authorization", "Bearer " + SavingResponsePayloadsData.getAccessToken())
                 .body(requestBody)
                 .when()
                 .post(endpoint);

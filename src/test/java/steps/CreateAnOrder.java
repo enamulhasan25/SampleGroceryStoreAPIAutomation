@@ -50,7 +50,7 @@ public class CreateAnOrder {
             // Save OrderId to a variable
             setOrderId(actualOrderIdFromResponse);
             // Save to file
-            SavingOrderIdAfterGeneration.saveOrderId(actualOrderIdFromResponse);
+            SavingResponsePayloadsData.saveOrderId(actualOrderIdFromResponse);
         } else {
             throw new RuntimeException("Failed to capture itemId from response.");
         }

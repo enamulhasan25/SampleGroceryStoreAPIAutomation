@@ -47,7 +47,7 @@ public class AddAnItemToCart {
             // Save ItemId to a variable
             setItemId(actualItemIdFromResponse);
             // Save to file
-            SavingItemIdAfterGeneration.saveItemId(actualItemIdFromResponse);
+            SavingResponsePayloadsData.saveItemId(actualItemIdFromResponse);
         } else {
             throw new RuntimeException("Failed to capture itemId from response.");
         }

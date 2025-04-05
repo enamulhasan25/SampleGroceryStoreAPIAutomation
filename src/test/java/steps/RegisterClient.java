@@ -82,7 +82,7 @@ public class RegisterClient {
 
                 setAccessToken(accessTokenFromResponsePayload);
                 // Save to file
-                steps.SavingAccessTokenForRegisteredClient.saveAccessToken(accessTokenFromResponsePayload);
+                steps.SavingResponsePayloadsData.saveAccessToken(accessTokenFromResponsePayload);
             } else {
                 out.println("Access Token not found in the response.");
             }

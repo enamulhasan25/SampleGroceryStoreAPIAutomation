@@ -27,7 +27,7 @@ public class CreateNewCart {
                 // Save cartId to variable
                 CreateNewCart.setCartId(newlyCreatedCartId);
                 // Save to file
-                steps.SavingCartIdAfterGeneration.saveCartId(newlyCreatedCartId);
+                steps.SavingResponsePayloadsData.saveCartId(newlyCreatedCartId);
             } else {
                 out.println("cartId not found in the response.");
             }
