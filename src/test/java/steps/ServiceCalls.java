@@ -17,16 +17,17 @@ public class ServiceCalls {
     String cartId = CreateNewCart.getCartId();
     String itemId = AddAnItemToCart.getItemId();
 
-    // GET Service Call
+    // Common GET Service Call
     @When("a GET call is made to the {string}")
     public void aGETCallMadeToThe(String endpoint) {
         res = given().get(endpoint);
     }
 
-    // GET call for the single product search
-    @When("a GET call is made to the single product endpoint {string} with productId {string}")
-    public void aGetCallMadeToTheSingleProductEndpoint(String endpoint, String productId) {
-        res = given().pathParam("productId", productId).get(endpoint);
+
+    // Common GET Service Call with path parameter
+    @When("a GET call is made to the endpoint {string} with pathParam of key {string} and value {string}")
+    public void aGetCallMadeToTheEndpointWithPathParam(String endpoint, String key, String value) {
+        res = given().pathParam(key, value).get(endpoint);
     }
 
     // GET call for retrieving the newly created cart
@@ -160,7 +161,7 @@ public class ServiceCalls {
         res = given().when().post(endpoint);
     }
 
-    // Validating the response code
+    // Common validating the response code
     @And("response code should be {int}")
     public void responseCodeShouldBe(int expectedCode) {
         Assert.assertEquals("Response code mismatch", expectedCode, res.getStatusCode());

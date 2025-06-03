@@ -63,7 +63,7 @@ public class RegisterClient {
     }
 
     @Given("I have request payload")
-    public void iPOSTRequestBody() throws IOException {
+    public void iHaveRequestBody() throws IOException {
         String randomEmail = generateRandomEmail(jsonFilePath);
         // Update the JSON file with the random email
         updateJsonFile(jsonFilePath, "clientEmail", randomEmail);
