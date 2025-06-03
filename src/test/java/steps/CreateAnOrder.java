@@ -41,7 +41,7 @@ public class CreateAnOrder {
 
     @Then("capture the orderId from the response payload")
     public void captureOrderIdFromResponse() {
-        ServiceCalls.res.body().prettyPrint();
+        //ServiceCalls.res.body().prettyPrint();
         String actualOrderIdFromResponse = ServiceCalls.res.jsonPath().getString("orderId");
         if (actualOrderIdFromResponse != null) {
             actualOrderIdFromResponse = actualOrderIdFromResponse.trim();

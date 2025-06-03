@@ -165,4 +165,15 @@ public class ServiceCalls {
     public void responseCodeShouldBe(int expectedCode) {
         Assert.assertEquals("Response code mismatch", expectedCode, res.getStatusCode());
     }
+
+    @When("a GET call is made to the {string} with auth token")
+    public void aGetCallIsMadeToTheWithAuthToken(String endpoint) {
+        String accessToken = SavingResponsePayloadsData.getAccessToken();
+        if (accessToken == null) {
+            throw new RuntimeException("Access token is null! Make sure the user is registered and logged in.");
+        }
+        res = given()
+                .header("Authorization", "Bearer " + accessToken)
+                .get(endpoint);
+    }
 }

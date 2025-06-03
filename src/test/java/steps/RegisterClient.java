@@ -79,7 +79,6 @@ public class RegisterClient {
                 ServiceCalls.res.body().prettyPrint();
                 accessTokenFromResponsePayload = accessTokenFromResponsePayload.trim();
                 out.println("Newly generated access token is: " + accessTokenFromResponsePayload);
-
                 setAccessToken(accessTokenFromResponsePayload);
                 // Save to file
                 steps.SavingResponsePayloadsData.saveAccessToken(accessTokenFromResponsePayload);
