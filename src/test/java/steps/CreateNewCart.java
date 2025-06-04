@@ -18,6 +18,7 @@ public class CreateNewCart {
 
     @Then("capture the newly created cartId from the response")
     public void captureNewlyCreatedCart() {
+        ServiceCalls.res.body().prettyPrint();
         if (ServiceCalls.res != null) {
             String newlyCreatedCartId = ServiceCalls.res.body().jsonPath().getString("cartId");
             if (newlyCreatedCartId != null) {

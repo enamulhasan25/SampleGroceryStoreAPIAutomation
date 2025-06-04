@@ -27,7 +27,16 @@ public class ServiceCalls {
     // Common GET Service Call with path parameter
     @When("a GET call is made to the endpoint {string} with pathParam of key {string} and value {string}")
     public void aGetCallMadeToTheEndpointWithPathParam(String endpoint, String key, String value) {
+        out.println("DEBUG: The cartId being used for the API call is: " + cartId);
+        String finalEndpoint = endpoint.replace("{cartId}", cartId); // Construct the actual URL
+        out.println("DEBUG: The full API URL being called is: " + finalEndpoint);
         res = given().pathParam(key, value).get(endpoint);
+    }
+
+    // Common GET Service Call with query parameter
+    @When("a GET call is made to the endpoint {string} with queryParam of key {string} and value {string}")
+    public void aGetCallMadeToTheEndpointWithQueryParams(String endpoint, String key, String value) {
+        res = given().queryParam(key, value).get(endpoint);
     }
 
     // GET call for retrieving the newly created cart
@@ -155,7 +164,7 @@ public class ServiceCalls {
                 .post(endpoint);
     }
 
-    // POST call without body for creating a cart
+    // Common POST call without body
     @When("a POST call without body is made to the {string}")
     public void aPostCallWithoutBodyIsMadeToThe(String endpoint) {
         res = given().when().post(endpoint);
